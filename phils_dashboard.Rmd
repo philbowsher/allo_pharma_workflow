@@ -1,36 +1,38 @@
 ---
-title: "R Notebook"
-output: html_notebook
+title: "Phils Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
 ---
 
-Packages
-```{r setup}
+```{r setup, include=FALSE}
+library(flexdashboard)
 library(readr)
 library(ggplot2)
 library(dplyr)
 library(plotly)
-```
 
-Data Import
-```{r echo = FALSE}
+
 library(readr)
 adae <- read_csv("https://rhoinc.github.io/data-library/data/clinical-trials/adam/adae.csv")
 
 adae
-```
 
-Data Wrangling
-```{r echo = FALSE}
 new_adae <- adae %>%
  filter(!(SITE %in% "Clinical Site 01")) %>%
  filter(!(ARM %in% "Screen Failure")) 
 
 new_adae
+
 ```
 
-Data Viz1
-```{r}
+Column {data-width=650}
+-----------------------------------------------------------------------
 
+### Chart A
+
+```{r}
 dv1 <- ggplot(new_adae) +
  aes(x = AESEV, fill = SEX) +
  geom_bar() +
@@ -38,13 +40,14 @@ dv1 <- ggplot(new_adae) +
  theme_minimal()
 
 ggplotly(dv1)
-
 ```
 
-Dataviz2
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
 ```{r}
-
-
 dv2 <- ggplot(new_adae) +
  aes(x = AESEV, weight = AGE) +
  geom_bar(fill = "#112446") +
@@ -52,13 +55,11 @@ dv2 <- ggplot(new_adae) +
  facet_wrap(vars(SEX))
 
 ggplotly(dv2)
-
 ```
 
-Dataviz3
+### Chart C
+
 ```{r}
-
-
 dv3 <- ggplot(new_adae) +
  aes(x = AESEV, fill = ARM) +
  geom_bar() +
