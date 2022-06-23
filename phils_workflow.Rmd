@@ -1,0 +1,71 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Packages
+```{r setup}
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(plotly)
+```
+
+Data Import
+```{r}
+library(readr)
+adae <- read_csv("https://rhoinc.github.io/data-library/data/clinical-trials/adam/adae.csv")
+
+adae
+```
+
+Data Wrangling
+```{r}
+new_adae <- adae %>%
+ filter(!(SITE %in% "Clinical Site 01")) %>%
+ filter(!(ARM %in% "Screen Failure")) 
+
+new_adae
+```
+
+Data Viz1
+```{r}
+
+dv1 <- ggplot(new_adae) +
+ aes(x = AESEV, fill = SEX) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ theme_minimal()
+
+ggplotly(dv1)
+
+```
+
+Dataviz2
+```{r}
+
+
+dv2 <- ggplot(new_adae) +
+ aes(x = AESEV, weight = AGE) +
+ geom_bar(fill = "#112446") +
+ theme_minimal() +
+ facet_wrap(vars(SEX))
+
+ggplotly(dv2)
+
+```
+
+Dataviz3
+```{r}
+
+
+dv3 <- ggplot(new_adae) +
+ aes(x = AESEV, fill = ARM) +
+ geom_bar() +
+ scale_fill_hue(direction = 1) +
+ coord_flip() +
+ theme_minimal()
+
+ggplotly(dv3)
+```
+
